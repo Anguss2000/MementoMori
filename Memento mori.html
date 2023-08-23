@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: #f0f0f0;
+  }
+
+  .header {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(80, 1fr);
+    gap: 1px;
+  }
+
+  .cell {
+    width: 10px;
+    height: 10px;
+    background-color: white;
+    border: 1px solid #ccc;
+  }
+
+  .black {
+    background-color: black;
+  }
+
+  .countdown {
+    font-size: 18px;
+    margin-top: 20px;
+  }
+</style>
+<title>Memento Mori</title>
+</head>
+<body>
+<div class="header">Memento Mori</div>
+<div class="grid" id="grid">
+  <!-- Generate the grid cells here using JavaScript -->
+</div>
+<div class="countdown" id="countdown"></div>
+
+<script>
+  const totalCells = 4160;
+  const initialBlackCells = 835;
+  const countdownDuration = 168 * 60 * 60 * 1000; // 168 hours in milliseconds
+
+  const gridElement = document.getElementById('grid');
+  const countdownElement = document.getElementById('countdown');
+  let remainingTime = countdownDuration;
+
+  function updateGrid() {
+    for (let i = 0; i < totalCells; i++) {
+      const cell = document.createElement('div');
+      cell.classList.add('cell');
+      if (i < initialBlackCells) {
+        cell.classList.add('black');
+      }
+      gridElement.appendChild(cell);
+    }
+  }
+
+  function updateCountdown() {
+    const hours = Math.floor(remainingTime / 3600000);
+    const minutes = Math.floor((remainingTime % 3600000) / 60000);
+    const seconds = Math.floor((remainingTime % 60000) / 1000);
+
+    countdownElement.textContent = `Next change in ${hours}h ${minutes}m ${seconds}s`;
+
+    remainingTime -= 1000;
+
+    if (remainingTime < 0) {
+      const cells = document.getElementsByClassName('cell');
+      cells[initialBlackCells].classList.add('black');
+      remainingTime = countdownDuration;
+    }
+  }
+
+  updateGrid();
+  updateCountdown();
+  setInterval(updateCountdown, 1000);
+</script>
+</body>
+</html>
